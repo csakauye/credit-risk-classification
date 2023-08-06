@@ -2,30 +2,19 @@
 
 ## Overview of the Analysis
 
-In this section, describe the analysis you completed for the machine learning models used in this Challenge. This might include:
+The purpose of this analysis was to train and evaluate a Supervised Learning model based on loan risks. Since this data is non-linear, we used Logistic Regression to predict whether a loan was healthy or high-risk. We looked at loan statuses for over 77,500 loans to train and test the model. 
 
-* Explain the purpose of the analysis.
-* Explain what financial information the data was on, and what you needed to predict.
-* Provide basic information about the variables you were trying to predict (e.g., `value_counts`).
-* Describe the stages of the machine learning process you went through as part of this analysis.
-* Briefly touch on any methods you used (e.g., `LogisticRegression`, or any resampling method).
+From initial data exploration, it was clear that the number of healthy loans greatly outweighed the number of high-risk loans in the dataset. Over 75,000 of the loans we evaluated were marked as healthy, whereas only 2,500 were considered at risk for defaulting. Because of this imbalance in the data, two models were run. For the first model, we were asked to perfom Logistic Regression on the data as is. But for the second model, we used Resampled Training data. 
+
+The concept of resampling data wasn't covered in class but from what I could find online (https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.RandomOverSampler.html), the goal is to over-sample the minority group. In this case, we oversampled high-risk loans. The process of oversampling, through the RandomOverSampler, evened out the number of high-risk and healthy loans to 75,036 each. 
+
+Despite the oversampled vs. non-oversampled data, the same steps were applied to train and evalute the model. The Logistic Regression models were instantiated, fitted with training data, used to make predictions from test data, scored on accuracy and then further evaluated with a confusion matrix and classification report. 
 
 ## Results
 
-Using bulleted lists, describe the balanced accuracy scores and the precision and recall scores of all machine learning models.
-
-* Machine Learning Model 1:
-  * Description of Model 1 Accuracy, Precision, and Recall scores.
-
-
-
-* Machine Learning Model 2:
-  * Description of Model 2 Accuracy, Precision, and Recall scores.
+Machine Learning Model 1 was trained with the original data. The balanced accuracy score 0.94 indicates that the model performs relatively well. However, since we know that a high accuracy isn't the only thing that is important when evaluating a model and can even be misleading, we have to look at the confusion matrix and classification report. Based on the confusion matrix, it is clear that there are several errors present in the model. There are about 80 Type 1 Errors and 67 Type 2 Errors. This means that 80 loans could be classified as healthy when they are in fact high risk. And that 67 healthy loans could be classified as high-risk and therefore, otherwise "good" borrowers could be seen as bad. Lastly, the classification matrix shows us that the model is skewed. It has a precision, recall and f1-score of 1 for healthy loans. Whereas high-risk loans have precision, recall and an f1-score in the high 0.80s. This tells us that the high accuracy may be due to the high accuracy of predicting healthy loans only and may not do as good of a job at predicting high-risk loans.  
+Machine Learning Model 2 was trained with the oversampled data. Since the data was more evenly weighted, the balanced accuracy score increased to 0.996. This is higher than the model without oversampled data and should indicate an even better model. Looking at the confusion matrix there are only 2 false negatives but there are 91 false positives. The number of false negatives has gone down, indicating the model got better at correctly predicting true positives, but the number of false positives has gone up meaning a few more loans that are high-risk are being classified as healthy. The number of true negatives has gone up with the number of false positives, so that could account for part of the increase. More high-risk loan data is being evaluated, so there are both more true negatives and false positives. The classification report, however, is probably most important when comparing these two models. The precision, recall and f1-score for healthy loans still remains at 1.0. But the recall and f1-scores for unhealthy loans has gone up. Since the recall score has gone up, this means the model is better at identifying unhealthy loans as unhealthy. Additionally, the increased f1-score means that both the precision and recall for predicting unhealthy loans has gone up. 
 
 ## Summary
 
-Summarize the results of the machine learning models, and include a recommendation on the model to use, if any. For example:
-* Which one seems to perform best? How do you know it performs best?
-* Does performance depend on the problem we are trying to solve? (For example, is it more important to predict the `1`'s, or predict the `0`'s? )
-
-If you do not recommend any of the models, please justify your reasoning.
+Based on the higher balanced accuracy, confusion matrices and classification reports, Machine Learning Model 2 with the resampled data performs best. While I don't know much about loans or oversampled data, I would think that it is more important to identify high-risk loans over healthy ones. If the goal of the model is to identify the "creditworthiness" of a borrower, those most at risk for default would be the most important. While Machine Learning Model 1 does a decent job at idenifying high-risk loans, Machine Learning Model 2 does a better job. If for some reason, someone only cared about healthy loans, both models do equally well in prediction. 
